@@ -306,24 +306,24 @@
           return
         }
 
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter'|| e.key === 'Tab') {
           const q = this.activeQuestionComponent()
           if(!q.getFocus() && q.getCanReceiveFocus()){
             q.focusField()
             return
           }
-          e.stopPropagation()
-          this.emitEnter()
-          this.reverse = false
-        } else if ( e.key === 'Tab') {
-            const q = this.activeQuestionComponent()
-            if(!q.getFocus() && q.getCanReceiveFocus()){
-              q.focusField()
-              return
+          
+          if (e.key === 'Tab') {
+            //e.preventDefault()
+            q.getFocus()? this.emitTab() : q.focusField()
             }
-            e.stopPropagation()
-            this.emitTab()
-            this.reverse = false
+        
+        
+          if(e.key === 'Enter') {
+           this.emitEnter()
+          } 
+          e.stopPropagation()
+          this.reverse = false
         }
       },
 

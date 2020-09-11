@@ -15,8 +15,7 @@
     data() {
       return {
         inputType: 'tel',
-        allowedChars: '0123456789.', 
-        canReceiveFocus: true
+        allowedChars: '0123456789.'
       }
     }
   }

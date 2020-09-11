@@ -85,7 +85,7 @@
         clearTimeout(this.timeoutId)
 
         if ($event) {
-          if ($event.key === 'Enter' || $event.key === 'Tab') {
+          if ($event.key === 'Enter'||$event.key === 'Tab') {
             if(!this.focused){
               this.setFocus()
               return

@@ -154,6 +154,15 @@
         this.focusField()
       },
 
+      returnFocus(){
+        const q = this.$refs.questionComponent
+        this.focusField()
+          if(!q.focused && q.canReceiveFocus){
+            this.focusField()
+            return
+          }
+      },
+
       /**
        * Emits "answer" event and calls "onEnter" method on Enter press
        */ 
@@ -164,25 +173,18 @@
             this.$emit('answer', q)
           }
            q.onEnter()
-        } else {
-          this.focusField()
-          if(!q.focused && q.canReceiveFocus){
-              this.focusField()
-              return
-            }
-
-        this.$emit('answer', q)
-        q.onEnter()
+        } 
+        else {
+          this.returnFocus()
+          this.$emit('answer', q)
+          q.onEnter()
         }
       },
 
       onTab($event) {
         const q = this.$refs.questionComponent
-        this.focusField()
-         if(!q.focused && q.canReceiveFocus){
-            this.focusField()
-            return
-          }
+        this.returnFocus()
+        q.focus()
         this.$emit('answer', q)
         q.onEnter()
       },
