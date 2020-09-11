@@ -2,6 +2,11 @@
 
 Create conversational conditional-logic forms with Vue.js.
 
+<p>
+  <a href="https://github.com/ditdot-dev/vue-flow-form/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/@ditdot-dev/vue-flow-form.svg?sanitize=true&amp;color=41B883" alt="License" /></a>
+  <a href="https://www.npmjs.com/package/@ditdot-dev/vue-flow-form"><img src="https://img.shields.io/npm/v/@ditdot-dev/vue-flow-form.svg?sanitize=true&amp;color=41B883" alt="Version" /></a>
+</p>
+
 <p align="center">
   <img src="https://www.ditdot.hr/demo/vff/visuals/v-form-green-full-rotate-02.png" alt="v-form screenshots">
 </p>
@@ -10,6 +15,10 @@ Create conversational conditional-logic forms with Vue.js.
 
 * [Questionnaire example](https://www.ditdot.hr/demo/vff/questionnaire/)
 * [Quiz example](https://www.ditdot.hr/demo/vff/quiz/)
+
+## Project Documentation
+
+* [Guide](https://www.ditdot.hr/en/docs/vue-flow-form-guide)
 
 ## Example Project
 
@@ -101,7 +110,7 @@ And then in your App.vue file:
           // You can leave out this prop if you want to use the default definitions.
         }),
         questions: [
-          // QuestioModel array
+          // QuestionModel array
           new QuestionModel({
             title: 'Question',
             type: QuestionType.MultipleChoice,
@@ -120,8 +129,10 @@ And then in your App.vue file:
 <style>
   /* Import Vue Flow Form base CSS */
   @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.css';
-  /* Import Vue Flow Form theme CSS (optional) */
-  @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme.css';
+  /* Import one of the Vue Flow Form CSS themes (optional) */
+  @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-minimal.css';
+  @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-green.css';
+  @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-purple.css';
 </style>
 ```
 
@@ -134,11 +145,11 @@ HTML:
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
     <!-- Flow Form -->
-    <script src="https://unpkg.com/@ditdot-dev/vue-flow-form@1.0.9"></script>
+    <script src="https://unpkg.com/@ditdot-dev/vue-flow-form@1.1.0"></script>
     <!-- Flow Form base CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@ditdot-dev/vue-flow-form@1.0.9/dist/vue-flow-form.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@ditdot-dev/vue-flow-form@1.1.0/dist/vue-flow-form.min.css">
     <!-- Optional theme.css -->
-    <link rel="stylesheet" href="https://unpkg.com/@ditdot-dev/vue-flow-form@1.0.9/dist/vue-flow-form.theme.css">
+    <link rel="stylesheet" href="https://unpkg.com/@ditdot-dev/vue-flow-form@1.1.0/dist/vue-flow-form.theme-minimal.min.css">
   </head>
   <body>
     <div id="app">
@@ -178,10 +189,6 @@ var app = new Vue({
 ## Browser Support
 
 Modern browsers and IE11.
-
-## Project Documentation
-
-[Guide](https://www.ditdot.hr/en/docs/vue-flow-form-guide)
 
 ## License
 

@@ -332,8 +332,8 @@
 </script>
 
 <style lang="css">
-  @import './branding.css';
+  @import '../../src/assets/css/themes/theme-purple.css';
   /* If using the npm package, use the following lines instead of the one above */
   /* @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.css'; */
-  /* @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme.css'; */
+  /* @import '~@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-purple.css'; */
 </style>

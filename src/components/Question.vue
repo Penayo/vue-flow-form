@@ -1,11 +1,11 @@
 // Single question template and logic
 
 <template>
-  <div class="animate q-form" v-bind:class="mainClasses">
-    <div class="q-inner" ref="qinner">
+  <div class="animate q-form" v-bind:class="mainClasses" ref="qanimate">
+    <div class="q-inner">
       <div v-bind:class="{'section-wrap': question.type === QuestionType.SectionBreak}">
         <div v-bind:class="{'fh2': question.type !== QuestionType.SectionBreak}">
-          <span class="f-title" v-if="question.tagline">{{ question.tagline }}</span>
+          <span class="f-tagline" v-if="question.tagline">{{ question.tagline }}</span>
 
           <template v-if="question.title">
             <span class="fh2" v-if="question.type === QuestionType.SectionBreak">{{ question.title }}</span>
@@ -31,7 +31,7 @@
           <span class="f-sub" v-if="question.subtitle || question.type === QuestionType.LongText || question.multiple">
             <span v-if="question.subtitle">{{ question.subtitle }}</span>
 
-            <span class="f-help" v-if="question.type === QuestionType.LongText">{{ question.helpText || language.longTextHelpText }}</span>
+            <span class="f-help" v-if="question.type === QuestionType.LongText && !isMobile">{{ question.helpText || language.longTextHelpText }}</span>
 
             <span class="f-help" v-if="question.multiple">{{ question.helpText || language.multipleChoiceHelpText }}</span>
           </span>
@@ -59,16 +59,16 @@
           v-on:click.prevent="onEnter"
           v-bind:aria-label="language.ariaOk"
         >
-            <span v-if="question.type === QuestionType.SectionBreak">{{ language.continue }}</span>
-            <span v-else>{{ language.ok }}</span>
+          <span v-if="question.type === QuestionType.SectionBreak">{{ language.continue }}</span>
+          <span v-else>{{ language.ok }}</span>
         </button>
         <a 
-          class="f-enter-desc"
-          href="#"
-          v-on:click.prevent="onEnter">
-          {{ language.pressEnter }}</a>
+          class="f-enter-desc" 
+          href="#" v-on:click.prevent="onEnter" 
+          v-if="question.type !== QuestionType.LongText || !isMobile">
+          {{ language.pressEnter }}
+        </a>
       </div>
-
       <div v-if="showInvalid()" class="f-invalid" role="alert" aria-live="assertive">{{ language.invalidPrompt }}</div>
     </div>
   </div>
@@ -77,6 +77,7 @@
 <script>
   /*
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
   */
 
@@ -92,6 +93,7 @@
   import FlowFormSectionBreakType from './QuestionTypes/SectionBreakType.vue'
   import FlowFormTextType from './QuestionTypes/TextType.vue'
   import FlowFormUrlType from './QuestionTypes/UrlType.vue'
+  import { IsMobile } from '../mixins/IsMobile'
 
   export default {
     name: 'FlowFormQuestion',
@@ -120,6 +122,9 @@
         default: false
       }
     },
+    mixins: [
+      IsMobile
+    ],
     data() {
       return {
         QuestionType: QuestionType,
@@ -130,35 +135,64 @@
       this.focusField()
       this.dataValue = this.question.answer
 
-      this.$refs.qinner.addEventListener('transitionend', this.onTransitionEnd)
+      this.$refs.qanimate.addEventListener('animationend', this.onAnimationEnd)
     },
     beforeDestroy() {
-      this.$refs.qinner.removeEventListener('transitionend', this.onTransitionEnd)
+      this.$refs.qanimate.removeEventListener('animationend', this.onAnimationEnd)
     },
     methods: {
       /**
        * Autofocus the input box of the current question
        */
       focusField() {
-        let el = this.$refs.questionComponent
+        const el = this.$refs.questionComponent
         
         el && el.focus()
       },
 
-      onTransitionEnd() {
-        this.enterPressed = false
+      onAnimationEnd() {
+        this.focusField()
       },
 
       /**
        * Emits "answer" event and calls "onEnter" method on Enter press
        */ 
-      onEnter() {
+      onEnter($event) {
         const q = this.$refs.questionComponent
+        if (this.question.type === QuestionType.LongText){
+          if(!q.focused){
+            this.$emit('answer', q)
+          }
+           q.onEnter()
+        } else {
+          this.focusField()
+          if(!q.focused && q.canReceiveFocus){
+              this.focusField()
+              return
+            }
 
-        if (q) {
-          this.$emit('answer', q)
-          q.onEnter()
+        this.$emit('answer', q)
+        q.onEnter()
         }
+      },
+
+      onTab($event) {
+        const q = this.$refs.questionComponent
+        this.focusField()
+         if(!q.focused && q.canReceiveFocus){
+            this.focusField()
+            return
+          }
+        this.$emit('answer', q)
+        q.onEnter()
+      },
+
+      getFocus(){
+        return this.$refs.questionComponent.focused
+      },
+
+      getCanReceiveFocus(){
+        return this.$refs.questionComponent.canReceiveFocus
       },
 
       /**

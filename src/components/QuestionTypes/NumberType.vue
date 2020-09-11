@@ -1,6 +1,7 @@
 <script>
   /*
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
   */
 
@@ -14,7 +15,8 @@
     data() {
       return {
         inputType: 'tel',
-        allowedChars: '0123456789.'
+        allowedChars: '0123456789.', 
+        canReceiveFocus: true
       }
     }
   }

@@ -8,6 +8,8 @@
     v-on:keyup="onChange"
     v-on:keyup.enter.prevent="onEnter"
     v-on:keyup.tab.prevent="onEnter"
+    v-on:focus="setFocus"
+    v-on:blur="unsetFocus"
     v-bind:placeholder="placeholder"
   />
 </template>
@@ -15,6 +17,7 @@
 <script>
   /*
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
   */
 
@@ -27,7 +30,8 @@
     name: QuestionType.Text,
     data() {
       return {
-        inputType: 'text'
+        inputType: 'text', 
+        canReceiveFocus: true
       }
     }
   }

@@ -118,6 +118,7 @@
 <script>
   /*!
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
   */
 
@@ -157,7 +158,6 @@
       window.addEventListener('beforeunload', this.onBeforeUnload)
 
       this.setQuestions()
-      this.focusActiveQuestion()
     },
     beforeDestroy() {
       document.removeEventListener('keyup', this.onKeyListener, true)
@@ -306,11 +306,24 @@
           return
         }
 
-        if (e.key === 'Enter' || e.key === 'Tab') {
+        if (e.key === 'Enter') {
+          const q = this.activeQuestionComponent()
+          if(!q.getFocus() && q.getCanReceiveFocus()){
+            q.focusField()
+            return
+          }
           e.stopPropagation()
-
           this.emitEnter()
           this.reverse = false
+        } else if ( e.key === 'Tab') {
+            const q = this.activeQuestionComponent()
+            if(!q.getFocus() && q.getCanReceiveFocus()){
+              q.focusField()
+              return
+            }
+            e.stopPropagation()
+            this.emitTab()
+            this.reverse = false
         }
       },
 
@@ -328,6 +341,18 @@
         if (q) {
           // Send enter event to the current question component
           q.onEnter()
+        } else if (this.completed && this.isOnLastStep) {
+          // We're finished - submit form
+          this.submit()
+        }
+      },
+
+      emitTab() {
+        const q = this.activeQuestionComponent()
+
+        if (q) {
+          // Send enter event to the current question component
+          q.onTab()
         } else if (this.completed && this.isOnLastStep) {
           // We're finished - submit form
           this.submit()
@@ -403,8 +428,6 @@
 
         if (this.activeQuestionIndex > 0) {
           --this.activeQuestionIndex
-
-          this.focusActiveQuestion()
         }
 
         this.reverse = true
@@ -421,16 +444,6 @@
         }
 
         this.reverse = false
-      },
-
-      focusActiveQuestion() {
-        this.$nextTick(() => {
-          const q = this.activeQuestionComponent()
-
-          if (q) {
-            q.focusField()
-          }
-        })
       },
 
       /**

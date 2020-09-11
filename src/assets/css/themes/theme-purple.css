@@ -1,5 +1,6 @@
-/*
+/*!
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
 */
 
@@ -57,6 +58,7 @@ header svg.logo{
 .v-form input[type=tel],
 .v-form input[type=email],
 .v-form input[type=url],
+.v-form input[type=password],
 .v-form textarea,
 .v-form span.faux-form {
   border-bottom-color: var(--secondary-text-color);
@@ -189,7 +191,7 @@ span.f-answered{
 }
 
 /*text-muted*/
-span.f-title,
+span.f-tagline,
 span.f-sub,
 p.description,
 .text-muted {

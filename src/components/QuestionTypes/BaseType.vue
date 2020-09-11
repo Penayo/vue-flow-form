@@ -3,11 +3,13 @@
 <script>
   /*
     Copyright (c) 2020 - present, DITDOT Ltd. - MIT Licence
+    https://github.com/ditdot-dev/vue-flow-form
     https://www.ditdot.hr/en
   */
 
   import QuestionModel, { QuestionType } from '../../models/QuestionModel'
   import LanguageModel from '../../models/LanguageModel'
+  import { IsMobile } from '../../mixins/IsMobile'
 
   export default {
     name: 'FlowFormBaseType',
@@ -17,6 +19,9 @@
       active: Boolean,
       value: [String, Array]
     },
+    mixins: [
+      IsMobile
+    ],
     data() {
       return {
         dirty: false,
@@ -24,7 +29,9 @@
         answer: null,
         enterPressed: false,
         allowedChars: null,
-        alwaysAllowedKeys: ['ArrowLeft', 'ArrowRight', 'Delete', 'Backspace']
+        alwaysAllowedKeys: ['ArrowLeft', 'ArrowRight', 'Delete', 'Backspace'],
+        focused: false, 
+        canReceiveFocus: false,
       }
     },
     mounted() {
@@ -52,6 +59,15 @@
         return el
       },
 
+      setFocus() {
+        this.focused = true
+      },
+
+      // eslint-disable-next-line no-unused-vars
+      unsetFocus($event) {
+        this.focused = false
+      },
+
       focus() {
         const el = this.getElement()
 
@@ -68,11 +84,21 @@
         this.enterPressed = false
         clearTimeout(this.timeoutId)
 
-        if ($event && this.allowedChars !== null) {
-          // Check if the entered character is allowed.
-          // We always allow keys from the alwaysAllowedKeys array.
-          if (this.alwaysAllowedKeys.indexOf($event.key) === -1 && this.allowedChars.indexOf($event.key) === -1) {
-            $event.preventDefault()
+        if ($event) {
+          if ($event.key === 'Enter' || $event.key === 'Tab') {
+            if(!this.focused){
+              this.setFocus()
+              return
+            }
+            //this.unsetFocus()
+          }
+
+          if (this.allowedChars !== null) {
+            // Check if the entered character is allowed.
+            // We always allow keys from the alwaysAllowedKeys array.
+            if (this.alwaysAllowedKeys.indexOf($event.key) === -1 && this.allowedChars.indexOf($event.key) === -1) {
+              $event.preventDefault()
+            }
           }
         }
       },
@@ -86,11 +112,11 @@
       },
 
       onEnter() {
-        this.enterPressed = true
+        this._onEnter()
+      },
 
-        if (this.question.type === QuestionType.SectionBreak) {
-          this.dirty = true
-        }
+      _onEnter() {
+        this.enterPressed = true
 
         this.dataValue = this.fixAnswer(this.dataValue)
         this.setAnswer(this.dataValue)
@@ -133,6 +159,10 @@
       }
     },
     computed: {
+      editingFinished() {
+        return true
+      },
+
       placeholder() {
         return this.question.placeholder || this.language.placeholder
       },
